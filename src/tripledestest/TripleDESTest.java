@@ -22,18 +22,28 @@ import javax.crypto.spec.SecretKeySpec;
 public class TripleDESTest {
     private String encrypt(String clearText, String secretKey) {
         try {
-            //convierte la key obtenida en string a un arreglo de bytes en el formato utf-8
+            //convierte la key obtenida en string a un arreglo de bytes en el formato utf-8 
             byte[] bytePass = secretKey.getBytes("utf-8");
+            //copia el arreglo de bytes creado a un arreglo de 24 elementos
             byte[] byteKey = Arrays.copyOf(bytePass, 24);
             
+            //Convierte el arreglo de bytes a una clave correspondiente de el TripleDES con 112 bits en este caso
             SecretKey key = new SecretKeySpec(byteKey, "DESede");
-            Cipher cipher = Cipher.getInstance("DESede");
+            //Crea una instancia del Cipher que es la principal herramienta de la librería crypto
+            //Se le envía de parámetro el algoritmo de encriptamiento que se desea implementar
+            Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+            //Se inicializa el cipher en modo encriptación, se le envía la llave con el formato correcto
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            
+            //Se convierte el texto plano a un arreglo de bytes
             byte[] byteText = clearText.getBytes("utf-8");
+            //El cipher encripta el arreglo de bytes enviado y se resetea. El resultado se guarda en un buffer
             byte[] buf = cipher.doFinal(byteText);
-            
+            //Convierte el arreglo de bits encriptados y los convierte a Base64
             byte[] byteBase64 = Base64.getEncoder().encode(buf);
+   
+            //System.out.println(byteBase64);
+            
+            //Convierte en arreglo de bytes en cadena formato utf-8
             String data = new String(byteBase64);
             
             return data;
@@ -64,13 +74,14 @@ public class TripleDESTest {
     }
     
     public static void main(String[] args) {
-        String clearText = "Hola soy Sara";
+        String clearText = "Este es el algoritmo 3DES";
         String secretKey = "SecretKey";
         
         String data = new TripleDESTest().encrypt(clearText, secretKey);
-        clearText = new TripleDESTest().decrypt(data, secretKey);
+        String clearTextDecripted = new TripleDESTest().decrypt(data, secretKey);
         
         System.out.println("Encrypted String: " + data);
-        System.out.println(clearText);
+        System.out.println("Decrypted Text: "+clearTextDecripted);
+        System.out.println("Original text: " +clearText);
     }
 }
