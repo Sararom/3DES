@@ -1,4 +1,5 @@
 /*
+ * Codigo obtenido de : "https://jiavictor.wordpress.com/2017/05/26/generate-same-3des-aes-128-aes-256-encrypted-message-with-python-php-java-and-openssl/
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -93,3 +94,11 @@ public class TripleDESTest {
         System.out.println("Original text: " +clearText);
     }
 }
+
+
+
+
+
+
+
+
