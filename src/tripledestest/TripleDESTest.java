@@ -27,11 +27,11 @@ public class TripleDESTest {
             //copia el arreglo de bytes creado a un arreglo de 24 elementos
             byte[] byteKey = Arrays.copyOf(bytePass, 24);
             
-            //Convierte el arreglo de bytes a una clave correspondiente de el TripleDES con 112 bits en este caso
+            //Convierte el arreglo de bytes a una clave correspondiente de el TripleDES con 168 bits 
             SecretKey key = new SecretKeySpec(byteKey, "DESede");
             //Crea una instancia del Cipher que es la principal herramienta de la librería crypto
             //Se le envía de parámetro el algoritmo de encriptamiento que se desea implementar
-            Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("DESede");
             //Se inicializa el cipher en modo encriptación, se le envía la llave con el formato correcto
             cipher.init(Cipher.ENCRYPT_MODE, key);
             //Se convierte el texto plano a un arreglo de bytes
@@ -43,8 +43,8 @@ public class TripleDESTest {
    
             //System.out.println(byteBase64);
             
-            //Convierte en arreglo de bytes en cadena formato utf-8
-            String data = new String(byteBase64);
+            //Convierte en arreglo de bytes base 64 en cadena formato utf-8
+            String data = new String(byteBase64, "utf-8");
             
             return data;
         }
@@ -55,15 +55,23 @@ public class TripleDESTest {
     
     private String decrypt(String data, String secretKey) {
         try {
+            //El texto encriptado se convierte de base 64 a un arreglo de bytes
             byte[] byteData = Base64.getDecoder().decode(data.getBytes("utf-8"));
+            //Al igual que en el proceso de encriptamiento se obtienen los bytes del password
             byte[] bytePass = secretKey.getBytes("utf-8");
+            //Los bytes del password se guardan en un arreglo de 24 bits
             byte[] byteKey = Arrays.copyOf(bytePass, 24);
             
+            //Convierte el arreglo de bytes a una clave correspondiente de el TripleDES con 168 bits
             SecretKey key = new SecretKeySpec(byteKey, "DESede");
+            //Se instancia el objeto Cipher en formato DESede
             Cipher cipher = Cipher.getInstance("DESede");
+            //Se inicializa el objeto en modo decrypt y se le envia la llave correspondiente
             cipher.init(Cipher.DECRYPT_MODE, key);
             
+            //Se desencripta y se guarda el resultado en un arreglo de bytes
             byte[] byteText = cipher.doFinal(byteData);
+            //Se convierte el arreglo de bytes a un string para mostrar
             String clearText = new String(byteText, "utf-8");
             
             return clearText;
